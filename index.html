@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="«Стройка» — живая деловая игра по станциям: 4–6 строительных компаний, у каждого игрока своя роль, ресурсы добываются заданиями, прибыль приносят заказы. 2 часа, 16–24 участника.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Стройка — живая деловая игра">
+<meta property="og:description" content="«Стройка» — живая деловая игра по станциям: 4–6 строительных компаний, у каждого игрока своя роль, ресурсы добываются заданиями, прибыль приносят заказы. 2 часа, 16–24 участника.">
+<meta property="og:image" content="https://dfedoseev04.github.io/stroyka/og.jpg">
+<meta property="og:url" content="https://dfedoseev04.github.io/stroyka/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='14' fill='%230A0909'/%3E%3Cpath d='M50 50C80.5 1.1 92 39.7 92 50C92 60.3 80.5 98.9 50 50C19.5 1.1 8 39.7 8 50C8 60.3 19.5 98.9 50 50Z' fill='none' stroke='%23F4F1EE' stroke-width='13'/%3E%3Crect x='43.5' y='0' width='13' height='100' fill='%23E6763E'/%3E%3C/svg%3E">
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Стройка · Дмитрий Федосеев</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+/* Layout: тёмный «пульт» игры — полосы на всю ширину, колонка 1160px; знак — косая оранжевая черта с визитки ведущего */
+:root {
+  --bg: #0A0909;
+  --panel: #141211;
+  --panel-2: #1B1816;
+  --line: #2A2522;
+  --ink: #F4F1EE;
+  --dim: #A8A19B;
+  --accent: #E6763E;
+  --accent-ink: #160A04;
+  --good: #5CC08A;
+  --f-display: "Montserrat", "Arial Black", Arial, sans-serif;
+  --f-body: "Golos Text", "Segoe UI", Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; overflow-x: hidden; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.eyebrow { font-family: var(--f-display); font-weight: 700; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+.slash { display: inline-block; width: 9px; height: 14px; background: var(--accent); transform: skewX(-28deg); flex: none; }
+.muted { color: var(--dim); }
+
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: rgba(10,9,9,.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; align-items: center; gap: 28px; padding-block: 12px; }
+.logo { font-family: var(--f-display); font-weight: 900; font-size: 21px; letter-spacing: .05em; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+header nav { display: flex; gap: 22px; margin-left: auto; font-size: 15px; }
+.back { font-size: 14px; color: var(--dim); text-decoration: none; white-space: nowrap; }
+.back:hover { color: var(--ink); }
+@media (max-width: 560px) { .back { display: none; } }
+@media (max-width: 1100px) { header nav a:nth-child(4) { display: none; } }
+header nav a { text-decoration: none; color: var(--dim); }
+header nav a:hover { color: var(--ink); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--f-display); font-weight: 700; font-size: 15px; letter-spacing: .03em; text-decoration: none; padding: 15px 24px; background: var(--accent); color: var(--accent-ink); border: 0; cursor: pointer; clip-path: polygon(0 0, 100% 0, 100% 70%, calc(100% - 12px) 100%, 0 100%); }
+.btn:hover { background: #F08A55; }
+.btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); clip-path: none; }
+.btn.ghost:hover { box-shadow: inset 0 0 0 1px var(--accent); }
+header .btn { padding: 10px 16px; font-size: 14px; }
+@media (max-width: 900px) { header nav { display: none; } header .btn { margin-left: auto; } }
+
+/* HERO */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+.hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(760px 560px at 100% 0%, rgba(230,118,62,.28), transparent 70%), radial-gradient(520px 420px at 0% 100%, rgba(201,86,28,.14), transparent 70%); pointer-events: none; }
+.hero .wrap { position: relative; padding-block: 64px 56px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 56px; align-items: center; }
+.brand { font-family: var(--f-display); font-weight: 900; font-size: 22px; letter-spacing: .3em; display: flex; align-items: center; gap: 14px; }
+.brand b { color: var(--accent); }
+.hero h1 { margin-top: 22px; font-weight: 800; font-size: clamp(32px, 4.2vw, 50px); line-height: 1.06; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lead { margin-top: 22px; font-size: 19px; line-height: 1.5; color: #D6CFC9; max-width: 46ch; }
+.params { margin-top: 28px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.params div { padding: 14px 12px 14px 0; min-width: 0; }
+.params div + div { padding-left: 14px; border-left: 1px solid var(--line); }
+.params b { display: block; font-family: var(--f-display); font-weight: 800; font-size: 22px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.params span { display: block; margin-top: 4px; font-size: 13px; line-height: 1.3; color: var(--dim); }
+.hero .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.shot { margin: 0; border: 1px solid var(--line); background: #000; min-width: 0; }
+.shot img { display: block; width: 100%; height: auto; }
+.shot figcaption { padding: 11px 14px; font-size: 13px; color: var(--dim); border-top: 1px solid var(--line); background: var(--panel); display: flex; gap: 10px; align-items: center; }
+.live::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--good); margin-right: 8px; animation: blink 2s infinite; }
+@keyframes blink { 50% { opacity: .3; } }
+@media (max-width: 900px) {
+  .hero .wrap { grid-template-columns: 1fr; gap: 36px; padding-block: 40px 40px; }
+  .params { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .params div:nth-child(3) { padding-left: 0; border-left: 0; }
+  .params div:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+
+section.block { padding-block: 96px 0; }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: end; margin-bottom: 40px; }
+.sec-head h2 { font-weight: 800; font-size: clamp(30px, 4vw, 48px); line-height: 1.06; margin-top: 12px; }
+.sec-head p { color: var(--dim); max-width: 52ch; }
+@media (max-width: 900px) { .sec-head { grid-template-columns: 1fr; gap: 14px; } section.block { padding-block: 64px 0; } }
+
+/* ДЛЯ КОГО */
+.aud { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.acard { display: flex; flex-direction: column; gap: 16px; padding: 28px 26px 26px; background: var(--panel); border: 1px solid var(--line); min-width: 0; }
+.acard.feat { border-color: var(--accent); background: linear-gradient(160deg, rgba(230,118,62,.14), var(--panel) 55%); }
+.acard .who { font-family: var(--f-display); font-weight: 700; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+.acard h3 { font-size: 23px; font-weight: 800; line-height: 1.15; }
+.acard p { font-size: 15px; color: var(--dim); }
+.acard ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 15px; }
+.acard li { display: flex; gap: 10px; align-items: baseline; }
+.acard li .slash { width: 7px; height: 11px; }
+.acard .meta { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.acard .meta span { font-size: 14px; color: var(--dim); }
+.acard .meta b { font-family: var(--f-display); font-weight: 800; font-size: 20px; color: var(--accent); white-space: nowrap; }
+.aud-note { margin-top: 16px; font-size: 14px; color: var(--dim); }
+@media (max-width: 900px) { .aud { grid-template-columns: 1fr; } }
+
+/* МЕХАНИКА */
+.mech { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--line); }
+.mcell { padding: 28px 28px 30px; min-width: 0; border-top: 1px solid var(--line); }
+.mcell:nth-child(-n+2) { border-top: 0; }
+.mcell:nth-child(even) { border-left: 1px solid var(--line); }
+.mcell .k { font-family: var(--f-display); font-weight: 700; font-size: 12px; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; }
+.mcell h3 { margin: 10px 0 8px; font-size: 22px; font-weight: 800; }
+.mcell p { font-size: 15px; color: var(--dim); max-width: 46ch; }
+@media (max-width: 900px) { .mech { grid-template-columns: 1fr; } .mcell:nth-child(2) { border-top: 1px solid var(--line); } .mcell:nth-child(even) { border-left: 0; } }
+.chainline { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 18px 22px; background: var(--panel); border: 1px solid var(--line); font-family: var(--f-display); font-weight: 700; font-size: 15px; }
+.chainline i { font-style: normal; color: var(--accent); }
+.chainline span.tag { font-family: var(--f-body); font-weight: 400; font-size: 14px; color: var(--dim); margin-right: 6px; }
+.tapline { margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 28px; align-items: center; padding: 24px; border: 1px solid var(--line); }
+.tapline h3 { font-size: 20px; font-weight: 800; }
+.tapline p { margin-top: 8px; font-size: 15px; color: var(--dim); max-width: 54ch; }
+.minicards { display: flex; gap: 10px; }
+.minicards img { width: 92px; height: auto; border-radius: 7px; border: 1px solid var(--line); display: block; }
+@media (max-width: 900px) { .tapline { grid-template-columns: 1fr; } .minicards img { width: calc((100% - 30px) / 4); } }
+
+/* КАК ПРОХОДИТ */
+.steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.step { border-top: 2px solid var(--line); padding-top: 16px; min-width: 0; }
+.step.core { border-top-color: var(--accent); }
+.step .n { font-family: var(--f-display); font-weight: 700; font-size: 13px; letter-spacing: .14em; color: var(--dim); }
+.step .t { margin-top: 10px; font-family: var(--f-display); font-weight: 800; font-size: 28px; line-height: 1; font-variant-numeric: tabular-nums; }
+.step .t small { font-size: 14px; color: var(--dim); margin-left: 3px; }
+.step h3 { font-size: 17px; font-weight: 700; margin: 10px 0 6px; }
+.step p { font-size: 14px; color: var(--dim); }
+@media (max-width: 900px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 16px; } }
+
+/* ОТЧЁТ */
+.report { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+.report figure { margin: 0; border: 1px solid var(--line); background: #000; min-width: 0; }
+.report img { display: block; width: 100%; height: auto; }
+.report figcaption { padding: 14px 16px; border-top: 1px solid var(--line); background: var(--panel); font-size: 14px; color: var(--dim); }
+.report figcaption b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 2px; }
+.gets { margin-top: 18px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.gets div { background: var(--bg); padding: 20px 20px 22px; min-width: 0; }
+.gets h3 { font-size: 16px; font-weight: 700; display: flex; gap: 10px; align-items: center; }
+.gets p { margin-top: 6px; font-size: 14px; color: var(--dim); }
+@media (max-width: 900px) { .report { grid-template-columns: 1fr; } .gets { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .gets { grid-template-columns: 1fr; } }
+
+/* ВЕДУЩИЙ — компактная полоса */
+.host { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 40px; padding: 32px; border: 1px solid var(--line); background: radial-gradient(520px 300px at 0% 100%, rgba(230,118,62,.16), transparent 70%), var(--panel); }
+.host .name { font-family: var(--f-display); font-weight: 900; font-size: clamp(28px, 3.2vw, 38px); line-height: 1; text-transform: uppercase; }
+.host .role { margin-top: 10px; font-size: 14px; color: var(--dim); letter-spacing: .03em; }
+.host .quote { margin-top: 18px; font-size: 16px; line-height: 1.5; max-width: 50ch; }
+.host .quote b { color: var(--accent); font-weight: 600; }
+.hstats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.hstats b { display: block; font-family: var(--f-display); font-weight: 900; font-size: clamp(22px, 2.4vw, 30px); color: var(--accent); line-height: 1; }
+.hstats span { display: block; margin-top: 6px; font-size: 12px; color: var(--dim); line-height: 1.3; }
+.regalia { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 14px; }
+.regalia li { display: flex; gap: 10px; align-items: baseline; }
+.regalia .slash { width: 7px; height: 11px; }
+details.more { margin-top: 12px; font-size: 14px; }
+details.more summary { cursor: pointer; color: var(--accent); font-weight: 600; list-style: none; }
+details.more summary::-webkit-details-marker { display: none; }
+details.more summary::after { content: " ↓"; }
+details.more[open] summary::after { content: " ↑"; }
+details.more ul { margin-top: 10px; }
+@media (max-width: 900px) { .host { grid-template-columns: 1fr; gap: 24px; padding: 24px 20px; } .hstats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
+
+/* FAQ */
+.faq { border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { cursor: pointer; list-style: none; padding: 20px 40px 20px 0; position: relative; font-family: var(--f-display); font-weight: 700; font-size: 18px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 4px; top: 16px; font-size: 26px; font-weight: 600; color: var(--accent); }
+.faq details[open] summary::after { content: "−"; }
+.faq .a { padding: 0 0 22px; color: var(--dim); max-width: 70ch; font-size: 16px; }
+.faq-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; }
+@media (max-width: 900px) { .faq-grid { grid-template-columns: 1fr; gap: 8px; } }
+
+/* КОНТАКТ */
+.contact { margin-top: 110px; position: relative; overflow: hidden; border-top: 1px solid var(--line); }
+.contact::before { content: ""; position: absolute; inset: 0; background: radial-gradient(800px 420px at 85% 120%, rgba(230,118,62,.34), transparent 70%); pointer-events: none; }
+.contact .wrap { position: relative; padding-block: 72px 60px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.contact h2 { font-weight: 900; font-size: clamp(32px, 4.4vw, 54px); line-height: 1.02; }
+.contact h2 em { font-style: normal; color: var(--accent); }
+.contact .sub { margin-top: 16px; color: var(--dim); max-width: 46ch; }
+.contact .checklist { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 15px; }
+.contact .checklist li { display: flex; gap: 10px; align-items: baseline; }
+.contact .checklist .slash { width: 7px; height: 11px; }
+.clist { display: grid; gap: 10px; }
+.crow { display: grid; grid-template-columns: 104px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 15px 18px; background: var(--panel); border: 1px solid var(--line); }
+.crow span { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); font-family: var(--f-display); font-weight: 700; }
+.crow a, .crow code { font-family: var(--f-display); font-weight: 700; font-size: 18px; text-decoration: none; overflow-wrap: anywhere; }
+.crow a:hover { color: var(--accent); }
+.copy { background: transparent; border: 1px solid var(--line); color: var(--dim); font: 600 13px var(--f-body); padding: 6px 10px; cursor: pointer; }
+.copy:hover { color: var(--ink); border-color: var(--accent); }
+.clist .btn { width: 100%; padding-block: 18px; font-size: 16px; }
+footer { border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 22px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; font-size: 13px; color: var(--dim); }
+@media (max-width: 900px) { .contact .wrap { grid-template-columns: 1fr; } .crow { grid-template-columns: minmax(0, 1fr) auto; } .crow span { grid-column: 1 / -1; } }
+</style>
+<style>
+/* Стройка: тот же фирменный стиль, свой мотив — разметка зала и строительные «ленты» */
+.tape { height: 10px; background: repeating-linear-gradient(-45deg, var(--accent) 0 14px, var(--bg) 14px 28px); opacity: .9; }
+.back { font-size: 14px; color: var(--dim); text-decoration: none; white-space: nowrap; }
+.back:hover { color: var(--ink); }
+@media (max-width: 560px) { .back { display: none; } }
+
+/* схема зала */
+.hall { position: relative; border: 1px dashed #4A403A; background:
+  linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 40px 40px,
+  linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 40px 40px, #0D0B0A;
+  aspect-ratio: 4 / 3; max-width: 100%; }
+.st { position: absolute; width: 33%; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--accent); }
+.st b { display: block; font-family: var(--f-display); font-weight: 800; font-size: 15px; }
+.st span { display: block; margin-top: 2px; font-size: 12px; color: var(--dim); line-height: 1.3; }
+.st.tl { left: 4%; top: 5%; } .st.tr { right: 4%; top: 5%; } .st.bl { left: 4%; bottom: 5%; } .st.br { right: 4%; bottom: 5%; }
+.board { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 30%; padding: 12px; text-align: center; background: var(--accent); color: var(--accent-ink); font-family: var(--f-display); font-weight: 800; font-size: 14px; }
+.board small { display: block; font-weight: 600; font-size: 11px; margin-top: 2px; }
+.base { position: absolute; width: 9%; aspect-ratio: 1; border: 1px solid #5A4E46; background: rgba(230,118,62,.08); display: grid; place-items: center; font-family: var(--f-display); font-weight: 700; font-size: 11px; color: var(--dim); }
+.hall-cap { margin-top: 10px; font-size: 13px; color: var(--dim); }
+@media (max-width: 520px) { .st { width: 37%; padding: 8px 9px; } .st b { font-size: 12px; } .st span { display: none; } .board { font-size: 11px; width: 34%; } .board small { display: none; } .base { font-size: 9px; } }
+
+/* роли */
+.roles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.role { padding: 22px 20px 22px; background: var(--panel); border: 1px solid var(--line); min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.role .badge { align-self: flex-start; font-family: var(--f-display); font-weight: 700; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 9px; background: var(--panel-2); border: 1px solid var(--line); color: var(--dim); }
+.role h3 { font-size: 20px; font-weight: 800; }
+.role p { font-size: 14px; color: var(--dim); }
+.role .lim { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink); }
+@media (max-width: 900px) { .roles { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .roles { grid-template-columns: 1fr; } }
+
+/* ресурсы */
+.res { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.res div { background: var(--bg); padding: 18px 16px 20px; min-width: 0; }
+.res .cls { font-family: var(--f-display); font-weight: 700; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.res .cls.el { color: var(--accent); }
+.res h3 { margin: 8px 0 6px; font-size: 18px; font-weight: 800; }
+.res p { font-size: 14px; color: var(--dim); }
+@media (max-width: 900px) { .res { grid-template-columns: 1fr 1fr; } }
+
+/* цикл */
+.cycle { display: grid; grid-template-columns: 1fr 11fr 3fr; border: 1px solid var(--line); }
+.cycle div { padding: 16px 14px; min-width: 0; border-left: 1px solid var(--line); }
+.cycle div:first-child { border-left: 0; }
+.cycle div.act { background: linear-gradient(90deg, rgba(230,118,62,.18), rgba(230,118,62,.06)); }
+.cycle b { display: block; font-family: var(--f-display); font-weight: 800; font-size: 20px; font-variant-numeric: tabular-nums; }
+.cycle span { display: block; margin-top: 4px; font-size: 13px; color: var(--dim); line-height: 1.35; }
+.cycle-cap { margin-top: 10px; font-size: 13px; color: var(--dim); }
+.arc { margin-top: 18px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.arc div { border-top: 2px solid var(--accent); padding-top: 14px; min-width: 0; }
+.arc .n { font-family: var(--f-display); font-weight: 700; font-size: 12px; letter-spacing: .14em; color: var(--dim); }
+.arc h3 { margin: 6px 0 6px; font-size: 18px; font-weight: 800; }
+.arc p { font-size: 14px; color: var(--dim); }
+@media (max-width: 700px) { .cycle { grid-template-columns: 1fr; } .cycle div { border-left: 0; border-top: 1px solid var(--line); } .cycle div:first-child { border-top: 0; } .arc { grid-template-columns: 1fr; } }
+
+.compare { margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; padding: 22px 24px; border: 1px solid var(--line); background: var(--panel); }
+.compare h3 { font-size: 18px; font-weight: 800; }
+.compare p { margin-top: 6px; font-size: 15px; color: var(--dim); max-width: 62ch; }
+@media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+</style>
+
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="#top"><i class="slash"></i>СТРОЙКА</a>
+  <a class="back" href="https://dfedoseev04.github.io/">← Все игры и выступления</a>
+  <nav><a href="#for">Для кого</a><a href="#how">Как устроена</a><a href="#process">Как проходит</a><a href="#faq">Вопросы</a></nav>
+  <a class="btn" href="https://t.me/Faterful" target="_blank" rel="noopener">Обсудить игру</a>
+</div></header>
+<div class="tape" aria-hidden="true"></div>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div>
+    <div class="brand"><i class="slash"></i><span>СТРОЙК<b>А</b></span></div>
+    <h1>Живая деловая игра: команды <em>строят компанию в движении</em></h1>
+    <p class="lead">Каждый игрок отвечает за свой участок: деньги, заказы, снабжение или развитие. Ресурсы добываются заданиями на силу, логику, творчество и командную работу, а прибыль приносят заказы, сданные в срок. Всё это без экранов и техники, на ногах.</p>
+    <div class="cta"><a class="btn" href="https://t.me/Faterful" target="_blank" rel="noopener">Написать в Telegram</a><a class="btn ghost" href="#how">Как устроена игра</a></div>
+    <div class="params">
+      <div><b>16–24</b><span>участника, 4–6 команд по 4</span></div>
+      <div><b>2 часа</b><span>6 игровых циклов и итоги</span></div>
+      <div><b>4 роли</b><span>у каждого игрока своя</span></div>
+      <div><b>без техники</b><span>зал, станции и ведущие</span></div>
+    </div>
+  </div>
+  <figure style="margin:0">
+    <div class="hall" role="img" aria-label="Схема зала: четыре станции по углам, табло в центре, базы команд вдоль стен">
+      <div class="st tl"><b>Рынок</b><span>заказы, продажа ресурсов, договоры</span></div>
+      <div class="st tr"><b>Цех снабжения</b><span>задания за ресурсы</span></div>
+      <div class="st bl"><b>Переговорная</b><span>касса команды и договоры</span></div>
+      <div class="st br"><b>Конструкторское бюро</b><span>улучшения компании</span></div>
+      <div class="board">ТАБЛО<small>капитал и репутация команд</small></div>
+      <div class="base" style="left:45.5%;top:3%">А</div>
+      <div class="base" style="left:45.5%;bottom:3%">Б</div>
+      <div class="base" style="left:2%;top:41%">В</div>
+      <div class="base" style="right:2%;top:41%">Г</div>
+    </div>
+    <figcaption class="hall-cap">Так выглядит зал: четыре станции по углам, табло в центре, базы команд вдоль стен.</figcaption>
+  </figure>
+</div></section>
+
+<section class="block" id="for"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="eyebrow">Для кого</div><h2>Когда группе нужно двигаться, а не сидеть</h2></div>
+    <p>«Стройка» держит энергию зала два часа: игроки постоянно перемещаются между станциями, выполняют задания и договариваются. Подходит там, где важны вовлечённость и командная работа.</p>
+  </div>
+  <div class="aud">
+    <div class="acard">
+      <div class="who">Молодёжные форумы и лагеря</div>
+      <h3>Командная игра на смене</h3>
+      <p>Знакомит команды, распределяет роли и даёт материал для вечерней рефлексии.</p>
+      <ul><li><i class="slash"></i>Роли и ответственность в команде</li><li><i class="slash"></i>Договорённости и репутация</li><li><i class="slash"></i>Энергия и вовлечение всех</li></ul>
+    </div>
+    <div class="acard feat">
+      <div class="who">Школы, колледжи, вузы</div>
+      <h3>Экономика через действие</h3>
+      <p>Заказ, ресурс, себестоимость, неустойка и репутация — понятия, которые игроки проживают руками.</p>
+      <ul><li><i class="slash"></i>Планирование по циклам</li><li><i class="slash"></i>Выбор между выгодой и риском</li><li><i class="slash"></i>Профориентация: роли в компании</li></ul>
+    </div>
+    <div class="acard">
+      <div class="who">Команды и коллективы</div>
+      <h3>Тимбилдинг с содержанием</h3>
+      <p>Весело, но с разбором: где команда теряла время и почему сорвались заказы.</p>
+      <ul><li><i class="slash"></i>Узкие места в коммуникации</li><li><i class="slash"></i>Делегирование и доверие</li><li><i class="slash"></i>Работа на общий результат</li></ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="block" id="how"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="eyebrow">Как устроена</div><h2>Четыре роли — четыре станции</h2></div>
+    <p>Каждый игрок может действовать только на своей станции, а все деньги и ресурсы хранятся у Управляющего. Поэтому команда выигрывает, только если быстро передаёт информацию и доверяет друг другу.</p>
+  </div>
+  <div class="roles">
+    <div class="role"><span class="badge">Переговорная</span><h3>Управляющий</h3><p>Держит кассу и склад, решает, какие заказы брать, заключает договоры с другими командами.</p><div class="lim">Главный стратег и узкое место команды</div></div>
+    <div class="role"><span class="badge">Рынок</span><h3>Менеджер по заказам</h3><p>Берёт заказы с доски, сдаёт выполненные, покупает и продаёт ресурсы, следит за конкурентами.</p><div class="lim">Не больше 3 заказов одновременно</div></div>
+    <div class="role"><span class="badge">Цех снабжения</span><h3>Снабженец</h3><p>Выполняет задания у ведущих и приносит ресурсы. Провалил задание — ресурса нет.</p><div class="lim">5 попыток за цикл</div></div>
+    <div class="role"><span class="badge">Конструкторское бюро</span><h3>Инженер</h3><p>Покупает улучшения компании: решает задачу бюро и вкладывает ресурсы в развитие.</p><div class="lim">До 3 улучшений одновременно</div></div>
+  </div>
+
+  <div style="margin-top:40px">
+    <div class="eyebrow" style="margin-bottom:14px">Ресурсы добываются заданиями</div>
+    <div class="res">
+      <div><div class="cls">обычный</div><h3>Металл</h3><p>Силовые: приседания, баланс, прыжки</p></div>
+      <div><div class="cls">обычный</div><h3>Дерево</h3><p>Логические: анаграммы, числовые ряды, задачи</p></div>
+      <div><div class="cls">обычный</div><h3>Ткань</h3><p>Творческие: пантомима, ассоциации, рекламный стих</p></div>
+      <div><div class="cls el">ценный</div><h3>Энергия</h3><p>На память и на ощупь</p></div>
+      <div><div class="cls el">ценный</div><h3>Бетон</h3><p>Командные: синхронность и общий рисунок</p></div>
+    </div>
+  </div>
+
+  <div class="mech" style="margin-top:18px">
+    <div class="mcell"><div class="k">Заказы</div><h3>Срок, награда, неустойка</h3><p>Заказы от «Фундаментной плиты» до мега-объектов. Сданный вовремя приносит монеты и репутацию, сорванный — штраф.</p></div>
+    <div class="mcell"><div class="k">Репутация</div><h3>Доверие открывает рынок</h3><p>Сложные и мега-заказы доступны только командам с высокой репутацией. Срыв стоит вдвое дороже успеха.</p></div>
+    <div class="mcell"><div class="k">Договоры</div><h3>Сделки между командами</h3><p>Поставка, обмен, займ, субподряд — на бланке с подписями. Исполненный договор поднимает репутацию обеих сторон.</p></div>
+    <div class="mcell"><div class="k">Рынок</div><h3>Цены меняются каждый цикл</h3><p>Дефицит металла, бум деревянного домостроения, зимний сезон. Иногда продать ресурс выгоднее, чем сдать заказ.</p></div>
+  </div>
+</div></section>
+
+<section class="block" id="process"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="eyebrow">Как проходит</div><h2>Шесть циклов по 15 минут</h2></div>
+    <p>Инструктаж 15 минут, шесть циклов, итоги 15 минут — всего 2 часа. Каждый цикл устроен одинаково, поэтому к третьему команды уже играют на скорость.</p>
+  </div>
+  <div class="cycle">
+    <div><b>1 мин</b><span>Открытие: цены и новости цикла</span></div>
+    <div class="act"><b>11 мин</b><span>Действия: работают все станции, заказы сдаются в любой момент</span></div>
+    <div><b>3 мин</b><span>Расчёт и план на следующий цикл</span></div>
+  </div>
+  <p class="cycle-cap">Один игровой цикл. Ширина полос пропорциональна времени.</p>
+  <div class="arc">
+    <div><div class="n">ЦИКЛЫ 1–2</div><h3>Разгон</h3><p>Лёгкие заказы и первые улучшения. Команды учатся работать вместе.</p></div>
+    <div><div class="n">ЦИКЛЫ 3–4</div><h3>Рост</h3><p>С репутацией открываются сложные заказы, с 4 цикла — мега-объекты.</p></div>
+    <div><div class="n">ЦИКЛЫ 5–6</div><h3>Финальный рывок</h3><p>Всё сдаётся до финального гонга, потом считается капитал.</p></div>
+  </div>
+  <div class="compare">
+    <div><h3>Нужна игра с цифрами и большим экраном?</h3><p>«ТРЕСТ» — бизнес-симуляция на NFC-картах: производство, живой рынок и автоматический отчёт о партии. Подходит для вузов и компаний.</p></div>
+    <a class="btn ghost" href="https://dfedoseev04.github.io/trest/">Смотреть «ТРЕСТ»</a>
+  </div>
+</div></section>
+
+<section class="block" id="host"><div class="wrap">
+  <div class="host">
+    <div>
+      <div class="eyebrow">Ведущий и автор игры</div>
+      <div class="name" style="margin-top:12px">Дмитрий Федосеев</div>
+      <div class="role">Игропрактик · ведущий · эксперт по публичным выступлениям</div>
+      <p class="quote">Провожу деловые игры и управленческие поединки на федеральных форумах «Машук», «Территория смыслов», «Юг Молодой», «Бирюса» и «Маяк». <b>Удерживаю внимание зала до 500+ человек.</b></p>
+    </div>
+    <div>
+      <div class="hstats">
+        <div><b>4500+</b><span>обученных участников</span></div>
+        <div><b>100+</b><span>мероприятий</span></div>
+        <div><b>500+</b><span>человек в зале</span></div>
+        <div><b>35+</b><span>регионов РФ</span></div>
+      </div>
+      <p style="margin-top:16px;font-size:14px"><a href="https://dfedoseev04.github.io/" style="color:var(--accent);font-weight:600;text-decoration:none">Опыт, темы выступлений и рекомендации →</a></p>
+    </div>
+  </div>
+</div></section>
+
+<section class="block" id="faq"><div class="wrap faq-grid">
+  <div class="sec-head" style="display:block;margin:0"><div class="eyebrow">Вопросы</div><h2>Что обычно спрашивают</h2></div>
+  <div class="faq">
+    <details><summary>Сколько нужно людей и ведущих?</summary><div class="a">Игроков — 16–24: от 4 до 6 команд по 4 человека. Ведущих — 5, минимум 3: с тремя ведущими игра идёт чуть медленнее, и правила под этот вариант уже продуманы. Кто будет ведущими, обсуждаем заранее.</div></details>
+    <details><summary>Какое помещение подходит?</summary><div class="a">Зал, в котором по углам помещаются четыре станции со столами, в центре — табло, а вдоль стен — базы команд. Нужен свободный квадрат примерно 1 × 1 метр для физических заданий.</div></details>
+    <details><summary>А если кому-то нельзя физическую нагрузку?</summary><div class="a">Игрок может отказаться от физического задания и взять другую карточку без потери попытки. Силовые задания — только часть игры, остальные на логику, память и творчество.</div></details>
+    <details><summary>Что нужно привезти?</summary><div class="a">Реквизит привожу сам: карточки заданий и заказов, фишки ресурсов (около 150), бейджи ролей, бланки договоров. От площадки — столы, стулья и место для табло.</div></details>
+    <details><summary>Сколько стоит?</summary><div class="a">Зависит от числа участников, ведущих и выезда. Напишите, для кого игра и когда — пришлю расчёт.</div></details>
+  </div>
+</div></section>
+</main>
+
+<section class="contact" id="contact"><div class="wrap">
+  <div>
+    <div class="eyebrow">Заказать игру</div>
+    <h2 style="margin-top:12px">Построим «Стройку» <em>для вашей группы</em></h2>
+    <p class="sub">Напишите в Telegram или на почту и укажите:</p>
+    <ul class="checklist">
+      <li><i class="slash"></i><span>кто участники и сколько их</span></li>
+      <li><i class="slash"></i><span>город, дату и площадку</span></li>
+      <li><i class="slash"></i><span>что хотите получить от игры</span></li>
+    </ul>
+  </div>
+  <div class="clist">
+    <a class="btn" href="https://t.me/Faterful" target="_blank" rel="noopener">Написать в Telegram</a>
+    <div class="crow"><span>Почта</span><code id="c-mail">i@dfedoseev.ru</code><button class="copy" type="button" data-copy="c-mail">Копировать</button></div>
+    <div class="crow"><span>Telegram</span><a href="https://t.me/Faterful" target="_blank" rel="noopener">t.me/Faterful</a><button class="copy" type="button" data-copy-text="t.me/Faterful">Копировать</button></div>
+    <div class="crow"><span>ВКонтакте</span><a href="https://vk.ru/faterful" target="_blank" rel="noopener">vk.ru/faterful</a><button class="copy" type="button" data-copy-text="vk.ru/faterful">Копировать</button></div>
+  </div>
+</div></section>
+<footer><div class="wrap"><span>«Стройка» · живая деловая игра · <a href="https://dfedoseev04.github.io/" style="color:inherit">все игры Дмитрия Федосеева</a></span><span>© Дмитрий Федосеев, 2026</span></div></footer>
+
+<script>
+document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', () => {
+  const t = b.dataset.copyText || document.getElementById(b.dataset.copy).textContent;
+  const done = () => { b.textContent = 'Скопировано'; setTimeout(() => b.textContent = 'Копировать', 1600); };
+  const fallback = () => { const el = b.previousElementSibling; const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Выделено — Ctrl+C'; };
+  try { navigator.clipboard.writeText(t).then(done, fallback); } catch (e) { fallback(); }
+}));
+</script>
+
+</body>
+</html>
